@@ -35,6 +35,7 @@ class RegisterController {
             $_SESSION["success"] = "Đã tạo tài khoản thành công vui lòng vào email để xác nhận";
             //Gởi email để kích hoạt tài khoản
             $email = $_POST["email"];
+            echo $data["password"];
             $mailServer = new MailService();
 
             $key = PRIVATE_KEY;
@@ -69,7 +70,7 @@ class RegisterController {
                 header("location: /");
             }
             $customer->setIsActive(1);
-            $customerRepository->update($customer);
+            $customerRepository->updateActive($customer);
             $_SESSION["success"] = "Tài khoản của bạn đã được active";
             //Cho phép login luôn
             $_SESSION["email"] = $email;

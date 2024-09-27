@@ -50,7 +50,9 @@
             $mobile = $data["mobile"];
             $email = $data["email"];
             $password = $data["password"];
+            echo $password;
             $hashed_password = md5(md5($password).PRIVATE_KEY);
+            echo $hashed_password;
             $updated_at=$Date;
             $created_at=$Date;
             $is_active =$data["is_active"];
@@ -97,6 +99,25 @@
                 SET role_id=$role_id, name='$name', mobile='$mobile', email='$email',
                     password='$hashed_password', updated_at='$updated_at', created_at='$created_at',
                     is_active=$is_active, address='$address', ward_id=$ward_id Where id=$id";
+
+            if ($conn->query($sql) === TRUE){
+                return true;
+            }
+            $this->error = "Error: " . $sql . PHP_EOL . $conn->error;
+            return false;
+        }
+
+        function updateActive($customer){
+            global $conn;
+            $id = $customer->getId();
+            $is_active = $customer->getIsActive();
+    
+            if (empty($is_active)) {
+                $is_active = 0;
+            }
+
+            $sql = "UPDATE user
+                SET is_active=$is_active Where id=$id";
 
             if ($conn->query($sql) === TRUE){
                 return true;

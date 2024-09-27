@@ -133,18 +133,27 @@ class OAuth2Client
      * @return string
      */
     public function getAuthorizationUrl($redirectUrl, $state, array $scope = [], array $params = [], $separator = '&')
-    {
-        $params += [
-            'client_id' => $this->app->getId(),
-            'state' => $state,
-            'response_type' => 'code',
-            'sdk' => 'php-sdk-' . Facebook::VERSION,
-            'redirect_uri' => $redirectUrl,
-            'scope' => implode(',', $scope)
-        ];
+{
+    // Kiểm tra và đảm bảo $separator là chuỗi
+    $separator = is_string($separator) ? $separator : '&';
+    
+    // Thêm các giá trị mặc định vào mảng $params
+    $params += [
+        'client_id' => $this->app->getId(),
+        'state' => $state,
+        'response_type' => 'code',
+        'sdk' => 'php-sdk-' . Facebook::VERSION,
+        'redirect_uri' => $redirectUrl,
+        'scope' => implode(',', $scope)
+    ];
 
-        return static::BASE_AUTHORIZATION_URL . '/' . $this->graphVersion . '/dialog/oauth?' . http_build_query($params, null, $separator);
-    }
+    // Lọc các giá trị null ra khỏi $params
+    $params = array_filter($params, function($value) {
+        return $value !== null;
+    });
+
+    return static::BASE_AUTHORIZATION_URL . '/' . $this->graphVersion . '/dialog/oauth?' . http_build_query($params, '', $separator);
+}
 
     /**
      * Get a valid access token from a code.

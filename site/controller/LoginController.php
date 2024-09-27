@@ -22,7 +22,10 @@ class LoginController {
                     else{
                         $_SESSION["error"]= "Tài khoản của bạn đã bị vô hiệu hóa. Xin vui lòng liên hệ Admin";
                     }
-                }    
+                }else {
+                    $_SESSION["error"]= "Sai mật khẩu ?";
+                    
+                }
                 header("location:index.php"); 
                 exit; 
             }
