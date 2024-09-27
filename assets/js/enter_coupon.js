@@ -112,6 +112,7 @@ $(document).ready(function () {
       method: "POST",
       data: data,
       success: function () {
+        fetch_entercoupon();
       }
     });
   });
